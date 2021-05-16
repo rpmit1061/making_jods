@@ -5,3 +5,8 @@ from .models import *
 admin.site.register(User)
 admin.site.register(Profile)
 admin.site.register(Interest)
+admin.site.register(Points)
+admin.site.register(PointsCategory)
+admin.site.register(ActivityPoints)
+
+

@@ -117,7 +117,10 @@ class Profile(BaseModel):
     profile_photo = models.FileField(upload_to="profile_pics", null=True, blank=True)
     show_name = models.CharField(max_length=50)
     description = models.CharField(max_length=255)
-    interest = models.ManyToManyField('accounts.Interest', blank=True, null=True, related_name='profile_interest')
+    interest = models.ManyToManyField('accounts.Interest', blank=True, related_name='profile_interest')
+    profile_visitor = models.ManyToManyField('accounts.User', blank=True, related_name='profile_visitor')
+    point_badge = models.ForeignKey('accounts.PointsCategory', blank=True, null=True, on_delete=models.CASCADE,
+                                    related_name='badge')
 
     def __str__(self):
         return self.user.get_full_name
@@ -125,9 +128,43 @@ class Profile(BaseModel):
 
 class Interest(BaseModel):
     name = models.CharField(max_length=50)
+    sub_interest = models.ForeignKey('accounts.Interest', on_delete=models.CASCADE,
+                                     null=True, related_name='interest_sub')
 
     def __str__(self):
         return self.name
+
+    def __repr__(self):
+        return self.name
+
+
+class Points(BaseModel):
+    activity_name = models.CharField(max_length=255)
+    points = models.IntegerField()
+
+    def __str__(self):
+        return self.activity_name
+
+    @property
+    def slug_name(self):
+        return self.activity_name.lower().replace(' ', '_')
+
+
+class PointsCategory(BaseModel):
+    points_category = models.CharField(max_length=255)
+    points = models.IntegerField()
+
+    def __str__(self):
+        return self.points_category
+
+
+class ActivityPoints(BaseModel):
+    activity_name = models.CharField(max_length=255)
+    points = models.IntegerField()
+    user = models.ForeignKey('accounts.User', on_delete=models.CASCADE, related_name='user_activity')
+
+    def __str__(self):
+        return self.user.first_name
 
 
 @receiver(reset_password_token_created)

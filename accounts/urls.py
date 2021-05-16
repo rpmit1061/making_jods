@@ -5,6 +5,8 @@ router = routers.SimpleRouter()
 router.register('user', views.UserViewSet)
 router.register('registration', views.UserRegistrationViewSet)
 router.register('profile', views.ProfileViewSet)
+router.register('interest', views.InterestViewSet)
+
 
 urlpatterns = router.urls
 

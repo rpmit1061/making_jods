@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from posts import models as post_models
 from posts import serializer as post_serializer
 # Create your views here.
+from posts.utils import add_points
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -27,6 +28,7 @@ class CommentsViewSet(viewsets.ModelViewSet):
         post = post_models.Posts.objects.get(id=post_id)
         comments = post.comments.create(user=user, comment=request.data.get('comment', ''))
         if comments:
+            add_points(post.user, activity_name="Comments")
             response = {
                 'status': 'success',
                 'code': status.HTTP_200_OK,

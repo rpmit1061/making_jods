@@ -1,5 +1,3 @@
-from abc import ABCMeta
-
 from rest_framework import serializers
 from accounts import models as account_model
 
@@ -41,3 +39,9 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = account_model.Profile
         exclude = ('created_at', 'updated_at')
+
+
+class InterestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = account_model.Interest
+        fields = '__all__'

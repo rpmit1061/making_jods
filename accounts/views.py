@@ -2,6 +2,7 @@ import random
 
 import requests
 from django.contrib.auth import authenticate
+from django.db.models import Sum
 
 from rest_framework.response import Response
 from rest_framework import viewsets, status, generics
@@ -16,6 +17,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from accounts import models as account_models
 from accounts import serializer as account_serializer
+from posts.utils import add_points
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -57,6 +59,7 @@ class UserRegistrationViewSet(viewsets.ModelViewSet):
     """ This is the API for the User registration."""
     queryset = account_models.User.objects.all()
     serializer_class = account_serializer.UserRegistrationSerializer
+    permission_classes = [AllowAny]
     http_method_names = ['post', 'patch']
 
     def create(self, request, *args, **kwargs):
@@ -65,42 +68,8 @@ class UserRegistrationViewSet(viewsets.ModelViewSet):
             obj = ser.save()
             obj.set_password(obj.password)
             obj.save()
+            obj.email_user()
         return Response({'details': "User Created Successfully."}, status=status.HTTP_200_OK)
-
-
-# class ChangePasswordView(generics.UpdateAPIView):
-#     """
-#     An endpoint for changing password.
-#     """
-#     serializer_class = account_serializer.ChangePasswordSerializer
-#     model = account_models.User
-#     permission_classes = (IsAuthenticated,)
-#
-#     def get_object(self, queryset=None):
-#         obj = self.request.user
-#         return obj
-#
-#     def update(self, request, *args, **kwargs):
-#         user_object = self.get_object()
-#         serializer = self.get_serializer(data=request.data)
-#
-#         if serializer.is_valid():
-#             # Check old password
-#             if not user_object.check_password(serializer.data.get("old_password")):
-#                 return Response({"old_password": ["Wrong password."]}, status=status.HTTP_400_BAD_REQUEST)
-#             # set_password also hashes the password that the user will get
-#             user_object.set_password(serializer.data.get("new_password"))
-#             user_object.save()
-#             response = {
-#                 'status': 'success',
-#                 'code': status.HTTP_200_OK,
-#                 'message': 'Password updated successfully',
-#                 'data': []
-#             }
-#
-#             return Response(response)
-#
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class LoginViewSet(viewsets.ModelViewSet):
@@ -132,6 +101,7 @@ class LoginViewSet(viewsets.ModelViewSet):
                     user.is_email_verify = True
                     user.account_activation_token = None
                     user.save()
+                    add_points(user, activity_name="Sign Up")
                     return Response({'detail': "Email Verify successfully."}, status=status.HTTP_200_OK)
                 return Response({'detail': "OTP is Invalid."}, status=status.HTTP_401_UNAUTHORIZED)
             else:
@@ -143,4 +113,25 @@ class ProfileViewSet(viewsets.ModelViewSet):
     queryset = account_models.Profile.objects.all()
     serializer_class = account_serializer.ProfileSerializer
     http_method_names = ['get', 'post']
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
+
+    def retrieve(self, request, *args, **kwargs):
+        visitor_user= self.request.user
+        profile_user = self.get_object()
+        if visitor_user is not profile_user and not profile_user.profile_visitor.filter(id=visitor_user.id).exists():
+            profile_user.profile_visitor.add(visitor_user)
+            add_points(user=profile_user.user, activity_name="Profile Watch")
+
+        return super(ProfileViewSet, self).retrieve(request, *args, **kwargs)
+
+    @action(detail=True, methods=['get'])
+    def get_points(self, request, *args, **kwargs):
+        points = self.get_object().user.user_activity.aggregate(total_points=Sum('points'))
+        return Response(points)
+
+
+class InterestViewSet(viewsets.ModelViewSet):
+    queryset = account_models.Interest.objects.all()
+    serializer_class = account_serializer.InterestSerializer
+    http_method_names = ['get']
+    permission_classes = [AllowAny]
