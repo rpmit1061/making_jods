@@ -15,7 +15,7 @@ SECRET_KEY = 'django-insecure-c#juwm^_h%wdph#d9dr@!jma+48q2f7_s6nxp0v27i)c&7)0#=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['ec2-54-224-226-198.compute-1.amazonaws.com']
+ALLOWED_HOSTS = ['ec2-18-234-129-16.compute-1.amazonaws.com']
 
 try:
     from .local_settings import *
