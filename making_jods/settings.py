@@ -35,7 +35,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_rest_passwordreset',
     'drf_yasg',
-    ''
 
     # 'django.contrib.sites',
     # 'allauth',
@@ -89,13 +88,6 @@ SWAGGER_SETTINGS = {
 }
 WSGI_APPLICATION = 'making_jods.wsgi.application'
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
-
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
 AUTH_USER_MODEL = 'accounts.User'
@@ -107,8 +99,6 @@ DATABASES = {
     }
 }
 
-
-# Database https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
@@ -186,7 +176,7 @@ STATIC_URL = '/static/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=5),
