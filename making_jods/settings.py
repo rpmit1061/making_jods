@@ -145,12 +145,18 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-FROM_EMAIL = 'rpmit1061@gmail.com'
+FROM_EMAIL = 'devtestmakingjods@gmail.com'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = "email-smtp.us-east-1.amazonaws.com"
-EMAIL_HOST_USER = 'AKIA5WNRDUECI5THJOXV'
-EMAIL_HOST_PASSWORD = 'BGpnN3ZXEqSSfj8gt68fbGlWd9tM1EvrxBUlSfKfwOzX'
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST_USER = 'devtestmakingjods@gmail.com'
+EMAIL_HOST_PASSWORD = 'making@123'
+
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# FROM_EMAIL = 'rpmit1061@gmail.com'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = "email-smtp.us-east-1.amazonaws.com"
+# EMAIL_HOST_USER = 'AKIA5WNRDUECI5THJOXV'
+# EMAIL_HOST_PASSWORD = 'BGpnN3ZXEqSSfj8gt68fbGlWd9tM1EvrxBUlSfKfwOzX'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
