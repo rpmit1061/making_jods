@@ -1,6 +1,3 @@
-import random
-
-import requests
 from django.contrib.auth import authenticate
 from django.db.models import Sum
 
@@ -8,7 +5,6 @@ from rest_framework.response import Response
 from rest_framework import viewsets, status, generics
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.decorators import action
-from rest_framework.utils import json
 from rest_framework_simplejwt.tokens import RefreshToken
 
 # from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
@@ -17,6 +13,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from accounts import models as account_models
 from accounts import serializer as account_serializer
+from making_jods.utils import CustomResponse
 from posts.utils import add_points
 
 
@@ -26,6 +23,8 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = account_serializer.UserSerializer
     http_method_names = ['get', 'post']
     permission_classes = [IsAuthenticated]
+    renderer_classes = [CustomResponse]
+
 
     def get_serializer_class(self):
         if self.action == 'change_password':
@@ -61,6 +60,7 @@ class UserRegistrationViewSet(viewsets.ModelViewSet):
     serializer_class = account_serializer.UserRegistrationSerializer
     permission_classes = [AllowAny]
     http_method_names = ['post', 'patch']
+    renderer_classes = [CustomResponse]
 
     def create(self, request, *args, **kwargs):
         ser = self.serializer_class(data=request.data)
@@ -77,6 +77,8 @@ class LoginViewSet(viewsets.ModelViewSet):
     serializer_class = account_serializer.LoginSerializer
     permission_classes = [AllowAny]
     http_method_names = ['post']
+    renderer_classes = [CustomResponse]
+
 
     @action(detail=False, methods=['post'])
     def login(self, request, **kwargs):
@@ -114,6 +116,8 @@ class ProfileViewSet(viewsets.ModelViewSet):
     serializer_class = account_serializer.ProfileSerializer
     http_method_names = ['get', 'post']
     permission_classes = [AllowAny]
+    renderer_classes = [CustomResponse]
+
 
     def retrieve(self, request, *args, **kwargs):
         visitor_user= self.request.user
@@ -135,3 +139,5 @@ class InterestViewSet(viewsets.ModelViewSet):
     serializer_class = account_serializer.InterestSerializer
     http_method_names = ['get']
     permission_classes = [AllowAny]
+    renderer_classes = [CustomResponse]
+

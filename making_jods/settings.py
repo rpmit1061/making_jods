@@ -149,8 +149,8 @@ FROM_EMAIL = 'devtestmakingjods@gmail.com'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_HOST_USER = 'devtestmakingjods@gmail.com'
-EMAIL_HOST_PASSWORD = 'making@123'
-
+EMAIL_HOST_PASSWORD = 'ufuwyrabrwepzenz'
+EMAIL_USE_SSL = False
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # FROM_EMAIL = 'rpmit1061@gmail.com'
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

@@ -3,7 +3,7 @@ from rest_framework import viewsets, status, generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
-
+from making_jods.utils import CustomResponse
 from posts import models as post_models
 from posts import serializer as post_serializer
 # Create your views here.
@@ -15,6 +15,7 @@ class PostViewSet(viewsets.ModelViewSet):
     serializer_class = post_serializer.PostSerializer
     permission_classes = [AllowAny]
     http_method_names = ['get', 'post']
+    renderer_classes = [CustomResponse]
 
 
 class CommentsViewSet(viewsets.ModelViewSet):
@@ -22,6 +23,7 @@ class CommentsViewSet(viewsets.ModelViewSet):
     serializer_class = post_serializer.CommentsSerializer
     permission_classes = [AllowAny]
     http_method_names = ['get', 'post']
+    renderer_classes = [CustomResponse]
 
     def create(self, request, post_id, *args, **kwargs):
         user = request.user
