@@ -4,6 +4,9 @@ from rest_framework import renderers
 
 
 class CustomResponse(renderers.BaseRenderer):
+    """
+    Class is used for override the response for the API.
+    """
     media_type = 'application/json'
     format = 'json'
 
